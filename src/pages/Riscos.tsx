@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -11,10 +12,15 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getRiskColor } from '@/lib/utils'
-import { useRisks } from '@/hooks/useGovernanceData'
+import { useRisks, useDeleteRisk } from '@/hooks/useGovernanceData'
+import { RowActions } from '@/components/shared/RowActions'
+import { EditRiskDialog } from '@/components/forms/EditRiskDialog'
+import type { Risk } from '@/types'
 
 export function Riscos() {
   const { data: mockRisks = [] } = useRisks()
+  const deleteRisk = useDeleteRisk()
+  const [editing, setEditing] = useState<Risk | null>(null)
   const activeRisks = mockRisks.filter(r => r.status === 'ativo')
   const criticalRisks = mockRisks.filter(r => r.level === 'critico')
   const highRisks = mockRisks.filter(r => r.level === 'alto')
@@ -69,11 +75,12 @@ export function Riscos() {
               <TableHead>Responsável</TableHead>
               <TableHead>Plano de Mitigação</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {mockRisks.map(risk => (
-              <TableRow key={risk.id} className="cursor-pointer hover:bg-muted/50">
+              <TableRow key={risk.id} className="hover:bg-muted/50">
                 <TableCell className="font-medium max-w-xs">{risk.description}</TableCell>
                 <TableCell>
                   <Badge className={getRiskColor(risk.impact)}>
@@ -99,11 +106,25 @@ export function Riscos() {
                     {risk.status}
                   </Badge>
                 </TableCell>
+                <TableCell>
+                  <RowActions
+                    onEdit={() => setEditing(risk)}
+                    onDelete={() => deleteRisk.mutate(risk.id)}
+                    deleteConfirmMessage={`Excluir este risco?`}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Card>
+
+      <EditRiskDialog
+        risk={editing}
+        open={!!editing}
+        onOpenChange={(o) => !o && setEditing(null)}
+      />
+
 
       {/* Risk Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

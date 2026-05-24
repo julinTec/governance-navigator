@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Plus, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -11,10 +12,15 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getStatusColor, getRiskColor, formatDate } from '@/lib/utils'
-import { useDelegations } from '@/hooks/useGovernanceData'
+import { useDelegations, useDeleteDelegation } from '@/hooks/useGovernanceData'
+import { RowActions } from '@/components/shared/RowActions'
+import { EditDelegationDialog } from '@/components/forms/EditDelegationDialog'
+import type { Delegation } from '@/types'
 
 export function Delegacoes() {
   const { data: mockDelegations = [] } = useDelegations()
+  const deleteDelegation = useDeleteDelegation()
+  const [editing, setEditing] = useState<Delegation | null>(null)
   const overdueDelegations = mockDelegations.filter(d => d.status === 'atrasada')
 
   return (
@@ -60,13 +66,14 @@ export function Delegacoes() {
               <TableHead>Status</TableHead>
               <TableHead>Risco</TableHead>
               <TableHead>Notas</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {mockDelegations.map(delegation => (
               <TableRow
                 key={delegation.id}
-                className={`cursor-pointer hover:bg-muted/50 ${
+                className={`hover:bg-muted/50 ${
                   delegation.status === 'atrasada' ? 'bg-red-50' : ''
                 }`}
               >
@@ -87,11 +94,25 @@ export function Delegacoes() {
                 <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
                   {delegation.notes}
                 </TableCell>
+                <TableCell>
+                  <RowActions
+                    onEdit={() => setEditing(delegation)}
+                    onDelete={() => deleteDelegation.mutate(delegation.id)}
+                    deleteConfirmMessage={`Excluir a delegação de "${delegation.responsible}"?`}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Card>
+
+      <EditDelegationDialog
+        delegation={editing}
+        open={!!editing}
+        onOpenChange={(o) => !o && setEditing(null)}
+      />
+
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
