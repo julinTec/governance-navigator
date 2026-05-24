@@ -94,7 +94,7 @@ export function FollowUps() {
                 <TableRow
                   key={followUp.id}
                   className={`cursor-pointer hover:bg-muted/50 ${
-                    isUrgent ? 'bg-orange-50' : ''
+                    urgent ? 'bg-orange-50' : ''
                   }`}
                 >
                   <TableCell className="font-medium">{followUp.person}</TableCell>
