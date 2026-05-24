@@ -1,4 +1,4 @@
-import { AlertCircle, CheckCircle, Clock, TrendingUp, Users } from 'lucide-react'
+import { AlertCircle, Clock, TrendingUp, Users } from 'lucide-react'
 import { KpiCard } from '@/components/dashboard/KpiCard'
 import { PriorityBoard } from '@/components/dashboard/PriorityBoard'
 import { RiskRadar } from '@/components/dashboard/RiskRadar'
