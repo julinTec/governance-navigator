@@ -14,16 +14,345 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      delegations: {
+        Row: {
+          created_at: string
+          deliverable: string
+          due_date: string | null
+          id: string
+          last_update: string | null
+          notes: string | null
+          responsible: string
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          status: Database["public"]["Enums"]["delegation_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deliverable: string
+          due_date?: string | null
+          id?: string
+          last_update?: string | null
+          notes?: string | null
+          responsible: string
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["delegation_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deliverable?: string
+          due_date?: string | null
+          id?: string
+          last_update?: string | null
+          notes?: string | null
+          responsible?: string
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["delegation_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      demands: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          next_step: string | null
+          origin: string | null
+          priority: Database["public"]["Enums"]["demand_priority"]
+          responsible: string | null
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          status: Database["public"]["Enums"]["demand_status"]
+          title: string
+          updated_at: string
+          workstream: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          next_step?: string | null
+          origin?: string | null
+          priority?: Database["public"]["Enums"]["demand_priority"]
+          responsible?: string | null
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["demand_status"]
+          title: string
+          updated_at?: string
+          workstream?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          next_step?: string | null
+          origin?: string | null
+          priority?: Database["public"]["Enums"]["demand_priority"]
+          responsible?: string | null
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["demand_status"]
+          title?: string
+          updated_at?: string
+          workstream?: string | null
+        }
+        Relationships: []
+      }
+      follow_ups: {
+        Row: {
+          created_at: string
+          follow_up_date: string | null
+          id: string
+          last_interaction: string | null
+          next_action: string | null
+          person: string
+          priority: Database["public"]["Enums"]["demand_priority"]
+          status: Database["public"]["Enums"]["followup_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          follow_up_date?: string | null
+          id?: string
+          last_interaction?: string | null
+          next_action?: string | null
+          person: string
+          priority?: Database["public"]["Enums"]["demand_priority"]
+          status?: Database["public"]["Enums"]["followup_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          follow_up_date?: string | null
+          id?: string
+          last_interaction?: string | null
+          next_action?: string | null
+          person?: string
+          priority?: Database["public"]["Enums"]["demand_priority"]
+          status?: Database["public"]["Enums"]["followup_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      meetings: {
+        Row: {
+          created_at: string
+          date: string
+          decisions: string[]
+          id: string
+          notes: string | null
+          participants: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          decisions?: string[]
+          id?: string
+          notes?: string | null
+          participants?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          decisions?: string[]
+          id?: string
+          notes?: string | null
+          participants?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pendencies: {
+        Row: {
+          created_at: string
+          description: string
+          due_date: string | null
+          id: string
+          meeting_id: string
+          responsible: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          due_date?: string | null
+          id?: string
+          meeting_id: string
+          responsible?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          due_date?: string | null
+          id?: string
+          meeting_id?: string
+          responsible?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pendencies_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar: string | null
+          created_at: string
+          department: string | null
+          email: string
+          id: string
+          name: string
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          id: string
+          name: string
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          id?: string
+          name?: string
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      risks: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          impact: Database["public"]["Enums"]["risk_impact"]
+          level: Database["public"]["Enums"]["risk_level"]
+          mitigation_plan: string | null
+          probability: Database["public"]["Enums"]["risk_probability"]
+          responsible: string | null
+          status: Database["public"]["Enums"]["risk_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          impact?: Database["public"]["Enums"]["risk_impact"]
+          level?: Database["public"]["Enums"]["risk_level"]
+          mitigation_plan?: string | null
+          probability?: Database["public"]["Enums"]["risk_probability"]
+          responsible?: string | null
+          status?: Database["public"]["Enums"]["risk_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          impact?: Database["public"]["Enums"]["risk_impact"]
+          level?: Database["public"]["Enums"]["risk_level"]
+          mitigation_plan?: string | null
+          probability?: Database["public"]["Enums"]["risk_probability"]
+          responsible?: string | null
+          status?: Database["public"]["Enums"]["risk_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workstreams: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "coordenador" | "user"
+      delegation_status: "pendente" | "em-progresso" | "concluida" | "atrasada"
+      demand_priority: "baixa" | "media" | "alta" | "critica"
+      demand_status:
+        | "aberta"
+        | "em-progresso"
+        | "bloqueada"
+        | "concluida"
+        | "cancelada"
+      followup_status: "aberta" | "em-progresso" | "concluida"
+      risk_impact: "baixo" | "medio" | "alto" | "critico"
+      risk_level: "baixo" | "medio" | "alto" | "critico"
+      risk_probability: "baixa" | "media" | "alta" | "muito-alta"
+      risk_status: "ativo" | "mitigado" | "encerrado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +479,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "coordenador", "user"],
+      delegation_status: ["pendente", "em-progresso", "concluida", "atrasada"],
+      demand_priority: ["baixa", "media", "alta", "critica"],
+      demand_status: [
+        "aberta",
+        "em-progresso",
+        "bloqueada",
+        "concluida",
+        "cancelada",
+      ],
+      followup_status: ["aberta", "em-progresso", "concluida"],
+      risk_impact: ["baixo", "medio", "alto", "critico"],
+      risk_level: ["baixo", "medio", "alto", "critico"],
+      risk_probability: ["baixa", "media", "alta", "muito-alta"],
+      risk_status: ["ativo", "mitigado", "encerrado"],
+    },
   },
 } as const
