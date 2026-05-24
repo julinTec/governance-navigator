@@ -79,16 +79,23 @@ export function Reunioes() {
           <h2 className="text-xl font-semibold mb-4">Próximas Reuniões</h2>
           <div className="space-y-4">
             {upcomingMeetings.map(meeting => (
-              <Card key={meeting.id} className="cursor-pointer hover:shadow-md transition">
+              <Card key={meeting.id} className="hover:shadow-md transition">
                 <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1">
                       <CardTitle className="text-lg">{meeting.title}</CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
                         {formatDate(meeting.date)}
                       </p>
                     </div>
-                    <Badge>Agendada</Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge>Agendada</Badge>
+                      <RowActions
+                        onEdit={() => setEditing(meeting)}
+                        onDelete={() => deleteMeeting.mutate(meeting.id)}
+                        deleteConfirmMessage={`Excluir a reunião "${meeting.title}"?`}
+                      />
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -115,16 +122,23 @@ export function Reunioes() {
           <h2 className="text-xl font-semibold mb-4">Reuniões Realizadas</h2>
           <div className="space-y-4">
             {pastMeetings.map(meeting => (
-              <Card key={meeting.id} className="cursor-pointer hover:shadow-md transition">
+              <Card key={meeting.id} className="hover:shadow-md transition">
                 <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1">
                       <CardTitle className="text-lg">{meeting.title}</CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
                         {formatDate(meeting.date)}
                       </p>
                     </div>
-                    <Badge variant="secondary">Realizada</Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary">Realizada</Badge>
+                      <RowActions
+                        onEdit={() => setEditing(meeting)}
+                        onDelete={() => deleteMeeting.mutate(meeting.id)}
+                        deleteConfirmMessage={`Excluir a reunião "${meeting.title}"?`}
+                      />
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -178,6 +192,12 @@ export function Reunioes() {
           </div>
         </div>
       )}
+
+      <EditMeetingDialog
+        meeting={editing}
+        open={!!editing}
+        onOpenChange={(o) => !o && setEditing(null)}
+      />
     </div>
   )
 }
