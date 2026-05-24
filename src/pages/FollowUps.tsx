@@ -1,4 +1,4 @@
-import { Plus, Clock, AlertCircle } from 'lucide-react'
+import { Plus, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getPriorityColor, getStatusColor, formatDate, getDaysUntil, isUrgent } from '@/lib/utils'
-import { mockFollowUps } from '@/data/mockData'
+import { useFollowUps } from '@/hooks/useGovernanceData'
 
 export function FollowUps() {
+  const { data: mockFollowUps = [] } = useFollowUps()
   const urgentFollowUps = mockFollowUps.filter(f => isUrgent(f.followUpDate))
   const openFollowUps = mockFollowUps.filter(f => f.status === 'aberta')
 
@@ -88,13 +89,13 @@ export function FollowUps() {
           <TableBody>
             {mockFollowUps.map(followUp => {
               const daysUntil = getDaysUntil(followUp.followUpDate)
-              const isUrgent = isUrgent(followUp.followUpDate)
+              const urgent = isUrgent(followUp.followUpDate)
 
               return (
                 <TableRow
                   key={followUp.id}
                   className={`cursor-pointer hover:bg-muted/50 ${
-                    isUrgent ? 'bg-orange-50' : ''
+                    urgent ? 'bg-orange-50' : ''
                   }`}
                 >
                   <TableCell className="font-medium">{followUp.person}</TableCell>

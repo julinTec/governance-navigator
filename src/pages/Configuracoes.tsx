@@ -1,12 +1,14 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { mockWorkstreams, mockUsers } from '@/data/mockData'
+import { useWorkstreams } from '@/hooks/useGovernanceData'
+import { mockUsers } from '@/data/mockData'
 
 export function Configuracoes() {
+  const { data: mockWorkstreams = [] } = useWorkstreams()
   const priorities = ['Baixa', 'Média', 'Alta', 'Crítica']
   const statuses = ['Aberta', 'Em Progresso', 'Bloqueada', 'Concluída', 'Cancelada']
   const riskLevels = ['Baixo', 'Médio', 'Alto', 'Crítico']

@@ -12,7 +12,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn } from '@/lib/utils'
+
 
 const navItems = [
   { href: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -49,7 +49,7 @@ function NavContent() {
 }
 
 export function AppSidebar() {
-  const location = useLocation()
+
 
   return (
     <>

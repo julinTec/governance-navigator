@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getRiskColor } from '@/lib/utils'
-import { mockRisks } from '@/data/mockData'
+import { useRisks } from '@/hooks/useGovernanceData'
 
 export function Riscos() {
+  const { data: mockRisks = [] } = useRisks()
   const activeRisks = mockRisks.filter(r => r.status === 'ativo')
   const criticalRisks = mockRisks.filter(r => r.level === 'critico')
   const highRisks = mockRisks.filter(r => r.level === 'alto')
