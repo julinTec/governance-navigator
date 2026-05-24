@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Plus, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -11,10 +12,15 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getPriorityColor, getStatusColor, formatDate, getDaysUntil, isUrgent } from '@/lib/utils'
-import { useFollowUps } from '@/hooks/useGovernanceData'
+import { useFollowUps, useDeleteFollowUp } from '@/hooks/useGovernanceData'
+import { RowActions } from '@/components/shared/RowActions'
+import { EditFollowUpDialog } from '@/components/forms/EditFollowUpDialog'
+import type { FollowUp } from '@/types'
 
 export function FollowUps() {
   const { data: mockFollowUps = [] } = useFollowUps()
+  const deleteFollowUp = useDeleteFollowUp()
+  const [editing, setEditing] = useState<FollowUp | null>(null)
   const urgentFollowUps = mockFollowUps.filter(f => isUrgent(f.followUpDate))
   const openFollowUps = mockFollowUps.filter(f => f.status === 'aberta')
 
@@ -84,6 +90,7 @@ export function FollowUps() {
               <TableHead>Dias</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Prioridade</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -94,7 +101,7 @@ export function FollowUps() {
               return (
                 <TableRow
                   key={followUp.id}
-                  className={`cursor-pointer hover:bg-muted/50 ${
+                  className={`hover:bg-muted/50 ${
                     urgent ? 'bg-orange-50' : ''
                   }`}
                 >
@@ -118,12 +125,26 @@ export function FollowUps() {
                       {followUp.priority}
                     </Badge>
                   </TableCell>
+                  <TableCell>
+                    <RowActions
+                      onEdit={() => setEditing(followUp)}
+                      onDelete={() => deleteFollowUp.mutate(followUp.id)}
+                      deleteConfirmMessage={`Excluir follow-up de "${followUp.person}"?`}
+                    />
+                  </TableCell>
                 </TableRow>
               )
             })}
           </TableBody>
         </Table>
       </Card>
+
+      <EditFollowUpDialog
+        followUp={editing}
+        open={!!editing}
+        onOpenChange={(o) => !o && setEditing(null)}
+      />
+
     </div>
   )
 }

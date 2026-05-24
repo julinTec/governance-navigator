@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/integrations/supabase/client'
 import type {
   Demand,
@@ -58,6 +58,41 @@ export function useDemands() {
   })
 }
 
+export function useUpdateDemand() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: Partial<Demand> & { id: string }) => {
+      const { error } = await supabase
+        .from('demands')
+        .update({
+          title: d.title,
+          origin: d.origin,
+          workstream: d.workstream,
+          responsible: d.responsible,
+          priority: d.priority as any,
+          status: d.status as any,
+          due_date: d.dueDate || null,
+          risk_level: d.riskLevel as any,
+          next_step: d.nextStep,
+        })
+        .eq('id', d.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['demands'] }),
+  })
+}
+
+export function useDeleteDemand() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('demands').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['demands'] }),
+  })
+}
+
 // ---------- Delegations ----------
 export function useDelegations() {
   return useQuery({
@@ -79,6 +114,39 @@ export function useDelegations() {
         notes: d.notes ?? undefined,
       }))
     },
+  })
+}
+
+export function useUpdateDelegation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: Partial<Delegation> & { id: string }) => {
+      const { error } = await supabase
+        .from('delegations')
+        .update({
+          responsible: d.responsible,
+          deliverable: d.deliverable,
+          due_date: d.dueDate || null,
+          last_update: d.lastUpdate || null,
+          status: d.status as any,
+          risk_level: d.riskLevel as any,
+          notes: d.notes,
+        })
+        .eq('id', d.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['delegations'] }),
+  })
+}
+
+export function useDeleteDelegation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('delegations').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['delegations'] }),
   })
 }
 
@@ -104,6 +172,39 @@ export function useRisks() {
         createdAt: r.created_at,
       }))
     },
+  })
+}
+
+export function useUpdateRisk() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (r: Partial<Risk> & { id: string }) => {
+      const { error } = await supabase
+        .from('risks')
+        .update({
+          description: r.description,
+          impact: r.impact as any,
+          probability: r.probability as any,
+          level: r.level as any,
+          mitigation_plan: r.mitigationPlan,
+          responsible: r.responsible,
+          status: r.status as any,
+        })
+        .eq('id', r.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['risks'] }),
+  })
+}
+
+export function useDeleteRisk() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('risks').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['risks'] }),
   })
 }
 
@@ -136,6 +237,38 @@ export function useMeetings() {
   })
 }
 
+export function useUpdateMeeting() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (m: Partial<Meeting> & { id: string }) => {
+      const { error } = await supabase
+        .from('meetings')
+        .update({
+          title: m.title,
+          date: m.date,
+          participants: m.participants,
+          decisions: m.decisions,
+          notes: m.notes,
+        })
+        .eq('id', m.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['meetings'] }),
+  })
+}
+
+export function useDeleteMeeting() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await supabase.from('pendencies').delete().eq('meeting_id', id)
+      const { error } = await supabase.from('meetings').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['meetings'] }),
+  })
+}
+
 // ---------- Follow-ups ----------
 export function useFollowUps() {
   return useQuery({
@@ -157,5 +290,38 @@ export function useFollowUps() {
         priority: f.priority,
       }))
     },
+  })
+}
+
+export function useUpdateFollowUp() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (f: Partial<FollowUp> & { id: string }) => {
+      const { error } = await supabase
+        .from('follow_ups')
+        .update({
+          person: f.person,
+          subject: f.subject,
+          last_interaction: f.lastInteraction || null,
+          next_action: f.nextAction,
+          follow_up_date: f.followUpDate || null,
+          status: f.status as any,
+          priority: f.priority as any,
+        })
+        .eq('id', f.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['follow_ups'] }),
+  })
+}
+
+export function useDeleteFollowUp() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('follow_ups').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['follow_ups'] }),
   })
 }

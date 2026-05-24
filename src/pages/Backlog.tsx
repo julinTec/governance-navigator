@@ -20,10 +20,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { getPriorityColor, getStatusColor, getRiskColor, formatDate } from '@/lib/utils'
-import { useDemands } from '@/hooks/useGovernanceData'
+import { useDemands, useDeleteDemand } from '@/hooks/useGovernanceData'
+import { RowActions } from '@/components/shared/RowActions'
+import { EditDemandDialog } from '@/components/forms/EditDemandDialog'
+import type { Demand } from '@/types'
 
 export function Backlog() {
   const { data: mockDemands = [] } = useDemands()
+  const deleteDemand = useDeleteDemand()
+  const [editing, setEditing] = useState<Demand | null>(null)
   const [filterStatus, setFilterStatus] = useState<string>('todas')
   const [filterPriority, setFilterPriority] = useState<string>('todas')
   const [filterResponsible, setFilterResponsible] = useState<string>('todas')
@@ -141,18 +146,19 @@ export function Backlog() {
               <TableHead>Status</TableHead>
               <TableHead>Risco</TableHead>
               <TableHead>Prazo</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                   Nenhuma demanda encontrada
                 </TableCell>
               </TableRow>
             ) : (
               filtered.map(demand => (
-                <TableRow key={demand.id} className="cursor-pointer hover:bg-muted/50">
+                <TableRow key={demand.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium max-w-xs truncate">{demand.title}</TableCell>
                   <TableCell>{demand.origin}</TableCell>
                   <TableCell className="text-sm">{demand.workstream}</TableCell>
@@ -173,12 +179,25 @@ export function Backlog() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm">{formatDate(demand.dueDate)}</TableCell>
+                  <TableCell>
+                    <RowActions
+                      onEdit={() => setEditing(demand)}
+                      onDelete={() => deleteDemand.mutate(demand.id)}
+                      deleteConfirmMessage={`Excluir a demanda "${demand.title}"?`}
+                    />
+                  </TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
       </Card>
+
+      <EditDemandDialog
+        demand={editing}
+        open={!!editing}
+        onOpenChange={(o) => !o && setEditing(null)}
+      />
     </div>
   )
 }
