@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getStatusColor, getRiskColor, formatDate } from '@/lib/utils'
-import { mockDelegations } from '@/data/mockData'
+import { useDelegations } from '@/hooks/useGovernanceData'
 
 export function Delegacoes() {
+  const { data: mockDelegations = [] } = useDelegations()
   const overdueDelegations = mockDelegations.filter(d => d.status === 'atrasada')
 
   return (

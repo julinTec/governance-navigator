@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
 import { getPriorityColor, getStatusColor, formatDate, getDaysUntil, isUrgent } from '@/lib/utils'
-import { mockFollowUps } from '@/data/mockData'
+import { useFollowUps } from '@/hooks/useGovernanceData'
 
 export function FollowUps() {
+  const { data: mockFollowUps = [] } = useFollowUps()
   const urgentFollowUps = mockFollowUps.filter(f => isUrgent(f.followUpDate))
   const openFollowUps = mockFollowUps.filter(f => f.status === 'aberta')
 

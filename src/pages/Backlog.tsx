@@ -20,9 +20,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { getPriorityColor, getStatusColor, getRiskColor, formatDate } from '@/lib/utils'
-import { mockDemands } from '@/data/mockData'
+import { useDemands } from '@/hooks/useGovernanceData'
 
 export function Backlog() {
+  const { data: mockDemands = [] } = useDemands()
   const [filterStatus, setFilterStatus] = useState<string>('todas')
   const [filterPriority, setFilterPriority] = useState<string>('todas')
   const [filterResponsible, setFilterResponsible] = useState<string>('todas')

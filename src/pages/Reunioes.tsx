@@ -4,9 +4,10 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { formatDate } from '@/lib/utils'
-import { mockMeetings } from '@/data/mockData'
+import { useMeetings } from '@/hooks/useGovernanceData'
 
 export function Reunioes() {
+  const { data: mockMeetings = [] } = useMeetings()
   const upcomingMeetings = mockMeetings.filter(
     m => new Date(m.date) >= new Date()
   ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
