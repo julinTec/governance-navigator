@@ -1,13 +1,19 @@
+import { useState } from 'react'
 import { Plus, Calendar, Users, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { formatDate } from '@/lib/utils'
-import { useMeetings } from '@/hooks/useGovernanceData'
+import { useMeetings, useDeleteMeeting } from '@/hooks/useGovernanceData'
+import { RowActions } from '@/components/shared/RowActions'
+import { EditMeetingDialog } from '@/components/forms/EditMeetingDialog'
+import type { Meeting } from '@/types'
 
 export function Reunioes() {
   const { data: mockMeetings = [] } = useMeetings()
+  const deleteMeeting = useDeleteMeeting()
+  const [editing, setEditing] = useState<Meeting | null>(null)
   const upcomingMeetings = mockMeetings.filter(
     m => new Date(m.date) >= new Date()
   ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
