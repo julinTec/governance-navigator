@@ -1,4 +1,4 @@
-import { Plus, Clock, AlertCircle } from 'lucide-react'
+import { Plus, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -88,7 +88,7 @@ export function FollowUps() {
           <TableBody>
             {mockFollowUps.map(followUp => {
               const daysUntil = getDaysUntil(followUp.followUpDate)
-              const isUrgent = isUrgent(followUp.followUpDate)
+              const urgent = isUrgent(followUp.followUpDate)
 
               return (
                 <TableRow
