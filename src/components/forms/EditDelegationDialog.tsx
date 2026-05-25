@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { Delegation } from '@/types'
-import { useUpdateDelegation } from '@/hooks/useGovernanceData'
+import { useUpdateDelegation, useCreateDelegation } from '@/hooks/useGovernanceData'
 
 interface Props {
   delegation: Delegation | null
@@ -15,20 +15,23 @@ interface Props {
 
 export function EditDelegationDialog({ delegation, open, onOpenChange }: Props) {
   const update = useUpdateDelegation()
+  const create = useCreateDelegation()
   const [form, setForm] = useState<Delegation | null>(delegation)
   useEffect(() => { setForm(delegation) }, [delegation])
   if (!form) return null
+  const isNew = !form.id
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    await update.mutateAsync(form)
+    if (isNew) await create.mutateAsync(form)
+    else await update.mutateAsync(form)
     onOpenChange(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Editar Delegação</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{isNew ? 'Nova Delegação' : 'Editar Delegação'}</DialogTitle></DialogHeader>
         <form onSubmit={handleSave} className="space-y-4">
           <div className="space-y-2">
             <Label>Responsável</Label>
