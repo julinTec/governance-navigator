@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '@/integrations/supabase/client'
+import { getSupabase } from '@/lib/supabaseClient'
 import type {
   Demand,
   Delegation,
@@ -14,6 +14,7 @@ export function useWorkstreams() {
   return useQuery({
     queryKey: ['workstreams'],
     queryFn: async (): Promise<Workstream[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('workstreams')
         .select('*')
@@ -34,6 +35,7 @@ export function useDemands() {
   return useQuery({
     queryKey: ['demands'],
     queryFn: async (): Promise<Demand[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('demands')
         .select('*')
@@ -62,6 +64,7 @@ export function useUpdateDemand() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (d: Partial<Demand> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('demands')
         .update({
@@ -86,6 +89,7 @@ export function useDeleteDemand() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       const { error } = await supabase.from('demands').delete().eq('id', id)
       if (error) throw error
     },
@@ -98,6 +102,7 @@ export function useDelegations() {
   return useQuery({
     queryKey: ['delegations'],
     queryFn: async (): Promise<Delegation[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('delegations')
         .select('*')
@@ -121,6 +126,7 @@ export function useUpdateDelegation() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (d: Partial<Delegation> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('delegations')
         .update({
@@ -143,6 +149,7 @@ export function useDeleteDelegation() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       const { error } = await supabase.from('delegations').delete().eq('id', id)
       if (error) throw error
     },
@@ -155,6 +162,7 @@ export function useRisks() {
   return useQuery({
     queryKey: ['risks'],
     queryFn: async (): Promise<Risk[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('risks')
         .select('*')
@@ -179,6 +187,7 @@ export function useUpdateRisk() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (r: Partial<Risk> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('risks')
         .update({
@@ -201,6 +210,7 @@ export function useDeleteRisk() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       const { error } = await supabase.from('risks').delete().eq('id', id)
       if (error) throw error
     },
@@ -213,6 +223,7 @@ export function useMeetings() {
   return useQuery({
     queryKey: ['meetings'],
     queryFn: async (): Promise<Meeting[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('meetings')
         .select('*, pendencies(*)')
@@ -241,6 +252,7 @@ export function useUpdateMeeting() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (m: Partial<Meeting> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('meetings')
         .update({
@@ -261,6 +273,7 @@ export function useDeleteMeeting() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       await supabase.from('pendencies').delete().eq('meeting_id', id)
       const { error } = await supabase.from('meetings').delete().eq('id', id)
       if (error) throw error
@@ -274,6 +287,7 @@ export function useFollowUps() {
   return useQuery({
     queryKey: ['follow_ups'],
     queryFn: async (): Promise<FollowUp[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('follow_ups')
         .select('*')
@@ -297,6 +311,7 @@ export function useUpdateFollowUp() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (f: Partial<FollowUp> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('follow_ups')
         .update({
@@ -319,6 +334,7 @@ export function useDeleteFollowUp() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       const { error } = await supabase.from('follow_ups').delete().eq('id', id)
       if (error) throw error
     },
