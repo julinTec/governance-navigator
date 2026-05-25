@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '@/integrations/supabase/client'
+import { getSupabase } from '@/lib/supabaseClient'
 import type {
   Demand,
   Delegation,
@@ -14,6 +14,7 @@ export function useWorkstreams() {
   return useQuery({
     queryKey: ['workstreams'],
     queryFn: async (): Promise<Workstream[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('workstreams')
         .select('*')
@@ -34,6 +35,7 @@ export function useDemands() {
   return useQuery({
     queryKey: ['demands'],
     queryFn: async (): Promise<Demand[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('demands')
         .select('*')
@@ -62,6 +64,7 @@ export function useUpdateDemand() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (d: Partial<Demand> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('demands')
         .update({
@@ -86,6 +89,7 @@ export function useDeleteDemand() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       const { error } = await supabase.from('demands').delete().eq('id', id)
       if (error) throw error
     },
@@ -98,6 +102,7 @@ export function useDelegations() {
   return useQuery({
     queryKey: ['delegations'],
     queryFn: async (): Promise<Delegation[]> => {
+      const supabase = await getSupabase()
       const { data, error } = await supabase
         .from('delegations')
         .select('*')
@@ -121,6 +126,7 @@ export function useUpdateDelegation() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (d: Partial<Delegation> & { id: string }) => {
+      const supabase = await getSupabase()
       const { error } = await supabase
         .from('delegations')
         .update({
@@ -143,6 +149,7 @@ export function useDeleteDelegation() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
       const { error } = await supabase.from('delegations').delete().eq('id', id)
       if (error) throw error
     },
