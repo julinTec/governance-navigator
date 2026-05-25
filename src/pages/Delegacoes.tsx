@@ -31,7 +31,10 @@ export function Delegacoes() {
           <h1 className="text-3xl font-bold">Delegações</h1>
           <p className="text-muted-foreground">Acompanhamento de entregas delegadas</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setEditing({
+          id: '', responsible: '', deliverable: '', dueDate: '', lastUpdate: '',
+          status: 'pendente', riskLevel: 'baixo', notes: '',
+        })}>
           <Plus className="h-4 w-4" />
           Nova Delegação
         </Button>

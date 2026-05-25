@@ -341,3 +341,104 @@ export function useDeleteFollowUp() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['follow_ups'] }),
   })
 }
+
+// ---------- Create mutations ----------
+export function useCreateDemand() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: Partial<Demand>) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('demands').insert({
+        title: d.title ?? '',
+        origin: d.origin,
+        workstream: d.workstream,
+        responsible: d.responsible,
+        priority: (d.priority ?? 'media') as any,
+        status: (d.status ?? 'aberta') as any,
+        due_date: d.dueDate || null,
+        risk_level: (d.riskLevel ?? 'baixo') as any,
+        next_step: d.nextStep,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['demands'] }),
+  })
+}
+
+export function useCreateDelegation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: Partial<Delegation>) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('delegations').insert({
+        responsible: d.responsible ?? '',
+        deliverable: d.deliverable ?? '',
+        due_date: d.dueDate || null,
+        last_update: d.lastUpdate || null,
+        status: (d.status ?? 'pendente') as any,
+        risk_level: (d.riskLevel ?? 'baixo') as any,
+        notes: d.notes,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['delegations'] }),
+  })
+}
+
+export function useCreateRisk() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (r: Partial<Risk>) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('risks').insert({
+        description: r.description ?? '',
+        impact: (r.impact ?? 'medio') as any,
+        probability: (r.probability ?? 'media') as any,
+        level: (r.level ?? 'medio') as any,
+        mitigation_plan: r.mitigationPlan,
+        responsible: r.responsible,
+        status: (r.status ?? 'ativo') as any,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['risks'] }),
+  })
+}
+
+export function useCreateMeeting() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (m: Partial<Meeting>) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('meetings').insert({
+        title: m.title ?? '',
+        date: m.date ?? new Date().toISOString().slice(0, 10),
+        participants: m.participants ?? [],
+        decisions: m.decisions ?? [],
+        notes: m.notes,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['meetings'] }),
+  })
+}
+
+export function useCreateFollowUp() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (f: Partial<FollowUp>) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('follow_ups').insert({
+        person: f.person ?? '',
+        subject: f.subject ?? '',
+        last_interaction: f.lastInteraction || null,
+        next_action: f.nextAction,
+        follow_up_date: f.followUpDate || null,
+        status: (f.status ?? 'aberta') as any,
+        priority: (f.priority ?? 'media') as any,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['follow_ups'] }),
+  })
+}

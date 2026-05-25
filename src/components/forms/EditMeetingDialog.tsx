@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { Meeting } from '@/types'
-import { useUpdateMeeting } from '@/hooks/useGovernanceData'
+import { useUpdateMeeting, useCreateMeeting } from '@/hooks/useGovernanceData'
 
 interface Props {
   meeting: Meeting | null
@@ -14,20 +14,23 @@ interface Props {
 
 export function EditMeetingDialog({ meeting, open, onOpenChange }: Props) {
   const update = useUpdateMeeting()
+  const create = useCreateMeeting()
   const [form, setForm] = useState<Meeting | null>(meeting)
   useEffect(() => { setForm(meeting) }, [meeting])
   if (!form) return null
+  const isNew = !form.id
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    await update.mutateAsync(form)
+    if (isNew) await create.mutateAsync(form)
+    else await update.mutateAsync(form)
     onOpenChange(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Editar Reunião</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{isNew ? 'Nova Reunião' : 'Editar Reunião'}</DialogTitle></DialogHeader>
         <form onSubmit={handleSave} className="space-y-4">
           <div className="space-y-2">
             <Label>Título</Label>
@@ -62,7 +65,7 @@ export function EditMeetingDialog({ meeting, open, onOpenChange }: Props) {
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-            <Button type="submit" disabled={update.isPending}>Salvar</Button>
+            <Button type="submit" disabled={update.isPending || create.isPending}>Salvar</Button>
           </DialogFooter>
         </form>
       </DialogContent>

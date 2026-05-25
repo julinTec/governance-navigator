@@ -33,7 +33,11 @@ export function Riscos() {
           <h1 className="text-3xl font-bold">Gestão de Riscos</h1>
           <p className="text-muted-foreground">Acompanhamento e mitigação de riscos</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setEditing({
+          id: '', description: '', impact: 'medio', probability: 'media',
+          level: 'medio', mitigationPlan: '', responsible: '', status: 'ativo',
+          createdAt: '',
+        })}>
           <Plus className="h-4 w-4" />
           Novo Risco
         </Button>
