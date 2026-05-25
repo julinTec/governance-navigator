@@ -32,7 +32,10 @@ export function FollowUps() {
           <h1 className="text-3xl font-bold">Follow-ups</h1>
           <p className="text-muted-foreground">Acompanhamento e cobranças de demandas</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setEditing({
+          id: '', person: '', subject: '', lastInteraction: '', nextAction: '',
+          followUpDate: '', status: 'aberta', priority: 'media',
+        })}>
           <Plus className="h-4 w-4" />
           Novo Follow-up
         </Button>
