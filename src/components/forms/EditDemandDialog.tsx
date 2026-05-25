@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { Demand } from '@/types'
-import { useUpdateDemand } from '@/hooks/useGovernanceData'
+import { useUpdateDemand, useCreateDemand } from '@/hooks/useGovernanceData'
 
 interface Props {
   demand: Demand | null
@@ -15,22 +15,25 @@ interface Props {
 
 export function EditDemandDialog({ demand, open, onOpenChange }: Props) {
   const update = useUpdateDemand()
+  const create = useCreateDemand()
   const [form, setForm] = useState<Demand | null>(demand)
 
   useEffect(() => { setForm(demand) }, [demand])
 
   if (!form) return null
+  const isNew = !form.id
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    await update.mutateAsync(form)
+    if (isNew) await create.mutateAsync(form)
+    else await update.mutateAsync(form)
     onOpenChange(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Editar Demanda</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{isNew ? 'Nova Demanda' : 'Editar Demanda'}</DialogTitle></DialogHeader>
         <form onSubmit={handleSave} className="space-y-4">
           <div className="space-y-2">
             <Label>Título</Label>
