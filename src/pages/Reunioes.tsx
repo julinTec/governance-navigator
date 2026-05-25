@@ -30,7 +30,10 @@ export function Reunioes() {
           <h1 className="text-3xl font-bold">Reuniões</h1>
           <p className="text-muted-foreground">Registro e acompanhamento de reuniões</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setEditing({
+          id: '', title: '', date: new Date().toISOString().slice(0, 10),
+          participants: [], decisions: [], pendencies: [], notes: '', createdAt: '',
+        })}>
           <Plus className="h-4 w-4" />
           Nova Reunião
         </Button>
