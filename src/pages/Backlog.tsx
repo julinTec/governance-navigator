@@ -59,7 +59,11 @@ export function Backlog() {
           <h1 className="text-3xl font-bold">Backlog de Demandas</h1>
           <p className="text-muted-foreground">Total: {filtered.length} demanda(s)</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setEditing({
+          id: '', title: '', origin: '', workstream: '', responsible: '',
+          priority: 'media', status: 'aberta', dueDate: '', riskLevel: 'baixo',
+          nextStep: '', createdAt: '', updatedAt: '',
+        })}>
           <Plus className="h-4 w-4" />
           Nova Demanda
         </Button>
