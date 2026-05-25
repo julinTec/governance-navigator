@@ -96,7 +96,7 @@ export function EditRiskDialog({ risk, open, onOpenChange }: Props) {
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-            <Button type="submit" disabled={update.isPending}>Salvar</Button>
+            <Button type="submit" disabled={update.isPending || create.isPending}>Salvar</Button>
           </DialogFooter>
         </form>
       </DialogContent>
