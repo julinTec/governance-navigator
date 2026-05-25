@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { Risk } from '@/types'
-import { useUpdateRisk } from '@/hooks/useGovernanceData'
+import { useUpdateRisk, useCreateRisk } from '@/hooks/useGovernanceData'
 
 interface Props {
   risk: Risk | null
@@ -15,20 +15,23 @@ interface Props {
 
 export function EditRiskDialog({ risk, open, onOpenChange }: Props) {
   const update = useUpdateRisk()
+  const create = useCreateRisk()
   const [form, setForm] = useState<Risk | null>(risk)
   useEffect(() => { setForm(risk) }, [risk])
   if (!form) return null
+  const isNew = !form.id
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    await update.mutateAsync(form)
+    if (isNew) await create.mutateAsync(form)
+    else await update.mutateAsync(form)
     onOpenChange(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Editar Risco</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{isNew ? 'Novo Risco' : 'Editar Risco'}</DialogTitle></DialogHeader>
         <form onSubmit={handleSave} className="space-y-4">
           <div className="space-y-2">
             <Label>Descrição</Label>
