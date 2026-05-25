@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { FollowUp } from '@/types'
-import { useUpdateFollowUp } from '@/hooks/useGovernanceData'
+import { useUpdateFollowUp, useCreateFollowUp } from '@/hooks/useGovernanceData'
 
 interface Props {
   followUp: FollowUp | null
@@ -15,20 +15,23 @@ interface Props {
 
 export function EditFollowUpDialog({ followUp, open, onOpenChange }: Props) {
   const update = useUpdateFollowUp()
+  const create = useCreateFollowUp()
   const [form, setForm] = useState<FollowUp | null>(followUp)
   useEffect(() => { setForm(followUp) }, [followUp])
   if (!form) return null
+  const isNew = !form.id
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    await update.mutateAsync(form)
+    if (isNew) await create.mutateAsync(form)
+    else await update.mutateAsync(form)
     onOpenChange(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Editar Follow-up</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{isNew ? 'Novo Follow-up' : 'Editar Follow-up'}</DialogTitle></DialogHeader>
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
