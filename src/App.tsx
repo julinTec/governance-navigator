@@ -12,6 +12,7 @@ import { Configuracoes } from '@/pages/Configuracoes'
 import { Materiais } from '@/pages/Materiais'
 import { NotFound } from '@/pages/NotFound'
 import { PreferencesProvider, usePreferences } from '@/contexts/PreferencesContext'
+import { Toaster } from 'sonner'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
