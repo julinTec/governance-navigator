@@ -54,7 +54,6 @@ export function Header() {
           {prefs.notifications && (
             <Button variant="ghost" size="icon" className="relative" title="Notificações">
               <Bell className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">3</Badge>
             </Button>
           )}
 
