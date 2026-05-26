@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 export type Theme = 'light' | 'dark' | 'system'
 export type Density = 'comfortable' | 'compact'
 export type DateLocale = 'pt-BR' | 'en-US'
-export type HomeRoute = '/' | '/backlog' | '/delegacoes' | '/riscos' | '/reunioes' | '/follow-ups'
+export type HomeRoute = '/' | '/backlog' | '/delegacoes' | '/riscos' | '/reunioes' | '/follow-ups' | '/materiais'
 
 export interface Profile {
   name: string

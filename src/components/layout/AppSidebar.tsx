@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   Calendar,
   CheckSquare,
+  FolderOpen,
   Settings,
   Menu,
 } from 'lucide-react'
@@ -21,6 +22,7 @@ const navItems = [
   { href: '/riscos', icon: AlertTriangle, label: 'Riscos' },
   { href: '/reunioes', icon: Calendar, label: 'Reuniões' },
   { href: '/follow-ups', icon: CheckSquare, label: 'Follow-ups' },
+  { href: '/materiais', icon: FolderOpen, label: 'Materiais' },
   { href: '/configuracoes', icon: Settings, label: 'Configurações' },
 ]
 

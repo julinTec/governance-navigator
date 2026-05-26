@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react'
-import { Plus, Trash2, Database, Download, Upload, Sparkles } from 'lucide-react'
+import { Plus, Trash2, Database, Download, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { useWorkstreams, useDeleteWorkstream } from '@/hooks/useGovernanceData'
 import { WorkstreamDialog } from '@/components/forms/WorkstreamDialog'
-import { exportAllData, importAllData, clearAllData, seedDemoData } from '@/lib/dataExport'
+import { exportAllData, importAllData, clearAllData } from '@/lib/dataExport'
 import { useQueryClient } from '@tanstack/react-query'
 
 export function Configuracoes() {
@@ -101,9 +101,6 @@ export function Configuracoes() {
         <CardHeader><CardTitle>Dados</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" className="gap-2" onClick={() => run('seed', seedDemoData)} disabled={busy !== null}>
-              <Sparkles className="h-4 w-4" /> {busy === 'seed' ? 'Carregando…' : 'Carregar dados de demonstração'}
-            </Button>
             <Button variant="outline" className="gap-2" onClick={() => run('export', exportAllData)} disabled={busy !== null}>
               <Download className="h-4 w-4" /> Exportar (JSON)
             </Button>
