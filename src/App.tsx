@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, MutationCache, QueryCache } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { Dashboard } from '@/pages/Dashboard'
@@ -12,9 +13,17 @@ import { Configuracoes } from '@/pages/Configuracoes'
 import { Materiais } from '@/pages/Materiais'
 import { NotFound } from '@/pages/NotFound'
 import { PreferencesProvider, usePreferences } from '@/contexts/PreferencesContext'
+import { Toaster } from 'sonner'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
+  mutationCache: new MutationCache({
+    onError: (err: any) => toast.error(err?.message || 'Erro ao salvar. Tente novamente.'),
+    onSuccess: () => toast.success('Salvo com sucesso'),
+  }),
+  queryCache: new QueryCache({
+    onError: (err: any) => toast.error(err?.message || 'Erro ao carregar dados'),
+  }),
 })
 
 function HomeRoute() {
@@ -29,6 +38,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <PreferencesProvider>
           <Router>
+            <Toaster position="top-right" richColors closeButton />
             <Routes>
               <Route element={<HomeRoute />} path="/" />
               <Route element={<AppLayout><Backlog /></AppLayout>} path="/backlog" />
