@@ -51,11 +51,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          {prefs.notifications && (
-            <Button variant="ghost" size="icon" className="relative" title="Notificações">
-              <Bell className="h-5 w-5" />
-            </Button>
-          )}
+          {prefs.notifications && <NotificationsBell />}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
