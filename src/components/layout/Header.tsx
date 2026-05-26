@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, LogOut, Bell, Settings } from 'lucide-react'
+import { User, LogOut, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
 import { usePreferences } from '@/contexts/PreferencesContext'
 import { ProfileDialog } from '@/components/profile/ProfileDialog'
 import { PreferencesDialog } from '@/components/profile/PreferencesDialog'
+import { NotificationsBell } from '@/components/layout/NotificationsBell'
 
 function initials(name: string) {
   return name
