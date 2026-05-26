@@ -73,6 +73,7 @@ export function PreferencesDialog({ open, onOpenChange }: Props) {
                 <SelectItem value="/riscos">Riscos</SelectItem>
                 <SelectItem value="/reunioes">Reuniões</SelectItem>
                 <SelectItem value="/follow-ups">Follow-ups</SelectItem>
+                <SelectItem value="/materiais">Materiais</SelectItem>
               </SelectContent>
             </Select>
           </div>
