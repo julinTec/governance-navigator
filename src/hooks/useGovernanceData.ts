@@ -30,6 +30,34 @@ export function useWorkstreams() {
   })
 }
 
+export function useCreateWorkstream() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (w: { name: string; description?: string; color?: string }) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('workstreams').insert({
+        name: w.name,
+        description: w.description || null,
+        color: w.color || null,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['workstreams'] }),
+  })
+}
+
+export function useDeleteWorkstream() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const supabase = await getSupabase()
+      const { error } = await supabase.from('workstreams').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['workstreams'] }),
+  })
+}
+
 // ---------- Demands ----------
 export function useDemands() {
   return useQuery({
