@@ -58,12 +58,14 @@ export function WeeklySummary({ demands, meetings }: WeeklySummaryProps) {
               <p className="text-xs text-muted-foreground">Reuniões agendadas</p>
               <p className="text-2xl font-bold">{thisWeekMeetings.length}</p>
             </div>
-            <div className="space-y-2">
-              <div className="text-sm p-2 bg-blue-50 rounded border border-blue-200">
-                <p className="font-medium text-blue-900">Acompanhamento</p>
-                <p className="text-xs text-blue-700">em dia</p>
+            {thisWeekMeetings.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-sm p-2 bg-blue-50 rounded border border-blue-200">
+                  <p className="font-medium text-blue-900">Acompanhamento</p>
+                  <p className="text-xs text-blue-700">em dia</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </CardContent>

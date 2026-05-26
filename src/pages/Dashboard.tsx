@@ -25,8 +25,6 @@ export function Dashboard() {
           icon={TrendingUp}
           description="Aguardando início"
           color="default"
-          trendValue="+2 esta semana"
-          trend="up"
         />
         <KpiCard
           title="Demandas Atrasadas"
@@ -34,8 +32,6 @@ export function Dashboard() {
           icon={Clock}
           description="Fora do prazo"
           color="warning"
-          trendValue="Atenção necessária"
-          trend="up"
         />
         <KpiCard
           title="Riscos Críticos"
@@ -43,8 +39,6 @@ export function Dashboard() {
           icon={AlertCircle}
           description="Ação imediata"
           color="danger"
-          trendValue="Requer escalação"
-          trend="up"
         />
         <KpiCard
           title="Delegações Pendentes"
@@ -52,8 +46,6 @@ export function Dashboard() {
           icon={Users}
           description="Aguardando execução"
           color="warning"
-          trendValue="-1 hoje"
-          trend="down"
         />
       </div>
 
