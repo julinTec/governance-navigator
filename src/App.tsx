@@ -17,6 +17,13 @@ import { Toaster } from 'sonner'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
+  mutationCache: new MutationCache({
+    onError: (err: any) => toast.error(err?.message || 'Erro ao salvar. Tente novamente.'),
+    onSuccess: () => toast.success('Salvo com sucesso'),
+  }),
+  queryCache: new QueryCache({
+    onError: (err: any) => toast.error(err?.message || 'Erro ao carregar dados'),
+  }),
 })
 
 function HomeRoute() {
