@@ -1,55 +1,50 @@
+## Diagnóstico
 
-# Ativar Lovable Cloud e migrar persistência
+A imagem é do **app publicado** (`tjce-manager.lovable.app`). O que ela mostra:
 
-## Objetivo
-Substituir `src/data/mockData.ts` por persistência real via Lovable Cloud (Supabase), mantendo 100% da UI atual funcionando. Nenhuma página, componente ou rota será recriada.
+1. **KPIs zerados, "Nenhuma demanda prioritária", Mapa de Riscos = 0** → não é bug: o banco realmente está vazio (nenhum registro nas tabelas `demands`, `delegations`, `risks`, `meetings`, `follow_ups`). Verificável via leitura direta do banco.
+2. **Botões "não funcionam" no publicado** → as correções recentes (ErrorBoundary, conexão dos botões aos dialogs, hooks `useCreate*`, lazy load do Supabase) **só existem na versão de preview**. O bundle publicado está congelado em uma versão antiga. Mudanças de frontend **não sobem automaticamente** — só com clique em **Update** no diálogo de publicação. Confirmado pela conversa anterior.
+3. **Header com ícone genérico de usuário** mostrando "Ana Silva" hardcoded (de mock). Você quer "Julio Cezar".
+4. **Preferências** abrem um item de menu vazio, sem ação.
 
-## Etapas
+## Plano de ajustes
 
-### 1. Provisionar Lovable Cloud
-- Ativar a integração (cria projeto Supabase gerenciado).
-- `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` ficam disponíveis automaticamente.
-- Ajustar `src/lib/supabaseClient.ts` para usar as novas variáveis (o arquivo atual usa `VITE_SUPABASE_ANON_KEY` legado).
+### 1. Header — perfil "Julio Cezar" + Preferências funcionais
+- Em `src/components/layout/Header.tsx`:
+  - Trocar nome para **Julio Cezar** e email para algo coerente (`julio.cezar@tjce.jus.br`).
+  - Mostrar iniciais "JC" em um avatar circular ao invés do ícone genérico.
+  - Item "Meu Perfil" → abre dialog com nome/email/cargo editáveis (persistido em `localStorage`).
+  - Item "Preferências" → abre dialog com opções reais e funcionais:
+    - **Tema**: Claro / Escuro / Sistema (aplica via classe `dark` no `<html>`).
+    - **Densidade da interface**: Confortável / Compacta (ajusta padding global via classe).
+    - **Idioma de datas**: pt-BR / en-US (usado em formatadores).
+    - **Notificações no sino**: ligado/desligado.
+    - **Página inicial padrão**: Dashboard / Backlog / Delegações / Riscos.
+  - Persistência via `localStorage` num provider `PreferencesProvider` aplicado no `App.tsx`.
+  - Botão "Sair" → limpa preferências locais e recarrega (não há auth real ainda).
 
-### 2. Criar schema (migration)
-Tabelas espelhando os tipos em `src/types/index.ts`:
+### 2. Garantir que o app seja realmente 100% funcional
+- **Auditar todos os botões "Plus / Nova *"** nas páginas Backlog, Delegações, Riscos, Reuniões, Follow-ups e Configurações para garantir que abrem o dialog correto e disparam `useCreate*`. (Já estavam conectados na rodada anterior; revalidar Configurações que ainda tem botões sem handler — "Nova Frente", "Novo Usuário", etc.)
+- **Configurações → tornar funcional o que faltar**:
+  - "Nova Frente" → dialog que cria registro em `workstreams` (insert real).
+  - Botão lixeira em workstreams → delete real com confirmação.
+  - Os blocos "Prioridades / Status / Níveis de Risco" são valores de enum fixos no schema; vamos transformá-los em **somente leitura** (remover botões Plus/Trash que enganam o usuário) com um aviso "Definidos pelo sistema".
+  - Botões "Exportar Dados" / "Importar Dados" → exportar JSON real de todas as tabelas; importar fará insert em lote.
+  - "Limpar Todos os Dados" → confirm + delete em cascata das tabelas operacionais.
+- **Popular dados de exemplo (opcional, recomendado)**: botão "Carregar dados de demonstração" em Configurações que insere um pacote de seed (3 demandas, 2 delegações, 2 riscos, 1 reunião, 2 follow-ups) para o usuário ver o app "vivo" assim que abrir. Isso resolve a percepção de "tudo zerado".
 
-- `workstreams` (id, name, description, color)
-- `profiles` (id ↔ auth.users, name, email, role, department, avatar)
-- `demands` (campos do tipo `Demand`)
-- `delegations` (campos do tipo `Delegation`)
-- `risks` (campos do tipo `Risk`)
-- `meetings` + `pendencies` (1:N)
-- `follow_ups`
-
-Enums Postgres para `demand_status`, `demand_priority`, `risk_level`, `delegation_status`, `meeting_status`, `followup_status`.
-
-### 3. RLS
-- RLS habilitada em todas as tabelas.
-- Política inicial: **leitura para qualquer authenticated user**, escrita restrita ao próprio `responsible`/`user_id` ou a admins.
-- Tabela `user_roles` separada + enum `app_role` (`admin`, `coordenador`, `user`) seguindo o padrão recomendado (sem armazenar role em profiles).
-- Função `has_role(uuid, app_role)` SECURITY DEFINER para uso nas policies.
-
-### 4. Seed de dados
-- Inserir os registros atuais de `mockData.ts` como seed inicial, para a UI continuar exibindo conteúdo equivalente após a migração.
-
-### 5. Camada de dados no frontend
-- Instalar/usar `@tanstack/react-query` (README já o menciona como "preparado").
-- Criar `src/hooks/` com: `useDemands`, `useDelegations`, `useRisks`, `useMeetings`, `useFollowUps`, `useWorkstreams`.
-- Adaptar `Dashboard`, `Backlog`, `Delegacoes`, `Riscos`, `Reunioes`, `FollowUps`, `Configuracoes` para consumir os hooks ao invés de `mockData`.
-- `mockData.ts` permanece temporariamente como fallback até validar a migração; removido depois.
-
-### 6. O que NÃO será feito agora
-- Autenticação (telas de login/signup) — fica para o próximo passo.
-- CRUD completo dos formulários — `DemandForm`, `DelegationForm`, `MeetingForm` continuam abrindo modal mas a persistência de escrita virá no passo seguinte. Esta entrega foca em **leitura real + base de schema**.
-- Remoção da pasta `manager-governanca/` (lixo de template) — pode ser feita junto se você quiser.
+### 3. Publicar
+- Após as mudanças, lembrar você de clicar em **Update** no diálogo de Publish para o bundle ir ao ar — esse é o passo que explica "aqui funciona, no publicado não".
 
 ## Detalhes técnicos
-- Migrations via tool de migração do Cloud (schema only).
-- Seed via insert tool após criação das tabelas.
-- Sem novos componentes UI; apenas hooks e ajuste de imports.
-- Padrão visual institucional preservado (nenhuma mudança em `index.css` ou `tailwind.config.ts`).
 
-## Pergunta antes de implementar
-Quer que eu **inclua autenticação básica (email/senha + Google) já nesta entrega** ou prefere manter o app aberto (leitura para todos) e tratar auth em seguida?
+- Novo arquivo `src/contexts/PreferencesContext.tsx` com `usePreferences()` lendo/gravando `localStorage` chave `cockpit:prefs`. Tema aplicado com `document.documentElement.classList.toggle('dark', ...)`.
+- Novos dialogs: `src/components/profile/ProfileDialog.tsx`, `src/components/profile/PreferencesDialog.tsx`.
+- Novo dialog `src/components/forms/WorkstreamDialog.tsx` + hooks `useCreateWorkstream`, `useDeleteWorkstream` em `useGovernanceData.ts`.
+- Função `exportAllData()` em `src/lib/dataExport.ts` chamando `supabase.from(...).select('*')` para cada tabela e fazendo download de `.json`. `importAllData(file)` faz o inverso.
+- `Home` padrão configurável: lido pelo `Index`/`App.tsx` para `<Navigate>` ao abrir `/` quando a preferência não for "Dashboard".
 
+## O que NÃO está no escopo
+
+- Autenticação real (login/logout, vínculo com `auth.users`). Hoje as tabelas estão com RLS pública (escolha sua anterior); o "perfil" é apenas local.
+- Mudar o schema do banco (enums, novas tabelas além de seed).
