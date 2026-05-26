@@ -101,9 +101,6 @@ export function Configuracoes() {
         <CardHeader><CardTitle>Dados</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" className="gap-2" onClick={() => run('seed', seedDemoData)} disabled={busy !== null}>
-              <Sparkles className="h-4 w-4" /> {busy === 'seed' ? 'Carregando…' : 'Carregar dados de demonstração'}
-            </Button>
             <Button variant="outline" className="gap-2" onClick={() => run('export', exportAllData)} disabled={busy !== null}>
               <Download className="h-4 w-4" /> Exportar (JSON)
             </Button>
