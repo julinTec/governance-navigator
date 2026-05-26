@@ -25,9 +25,13 @@ export function EditDemandDialog({ demand, open, onOpenChange }: Props) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (isNew) await create.mutateAsync(form)
-    else await update.mutateAsync(form)
-    onOpenChange(false)
+    try {
+      if (isNew) await create.mutateAsync(form)
+      else await update.mutateAsync(form)
+      onOpenChange(false)
+    } catch (err) {
+      console.error('Falha ao salvar demanda:', err)
+    }
   }
 
   return (
