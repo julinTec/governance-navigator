@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, LogOut, Bell, Settings } from 'lucide-react'
+import { User, LogOut, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
 import { usePreferences } from '@/contexts/PreferencesContext'
 import { ProfileDialog } from '@/components/profile/ProfileDialog'
 import { PreferencesDialog } from '@/components/profile/PreferencesDialog'
+import { NotificationsBell } from '@/components/layout/NotificationsBell'
 
 function initials(name: string) {
   return name
@@ -50,11 +51,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          {prefs.notifications && (
-            <Button variant="ghost" size="icon" className="relative" title="Notificações">
-              <Bell className="h-5 w-5" />
-            </Button>
-          )}
+          {prefs.notifications && <NotificationsBell />}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

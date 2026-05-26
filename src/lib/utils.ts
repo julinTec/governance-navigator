@@ -5,8 +5,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * Parse a date string as a LOCAL date.
+ * Fixes the off-by-one issue where 'YYYY-MM-DD' would be interpreted as UTC midnight
+ * and shifted backwards a day in negative-offset timezones (e.g. America/Sao_Paulo).
+ */
+export function parseLocalDate(date: string): Date {
+  if (!date) return new Date(NaN)
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(date)
+  if (m) {
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  }
+  return new Date(date)
+}
+
 export function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString('pt-BR', {
+  if (!date) return ''
+  return parseLocalDate(date).toLocaleDateString('pt-BR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -14,7 +29,8 @@ export function formatDate(date: string): string {
 }
 
 export function formatDateTime(date: string): string {
-  return new Date(date).toLocaleDateString('pt-BR', {
+  if (!date) return ''
+  return parseLocalDate(date).toLocaleDateString('pt-BR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -23,19 +39,21 @@ export function formatDateTime(date: string): string {
   })
 }
 
+function startOfDay(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate())
+}
+
 export function getDaysSince(date: string): number {
-  const now = new Date()
-  const pastDate = new Date(date)
-  const diffTime = Math.abs(now.getTime() - pastDate.getTime())
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  return diffDays
+  const now = startOfDay(new Date())
+  const pastDate = startOfDay(parseLocalDate(date))
+  const diffDays = Math.round((now.getTime() - pastDate.getTime()) / (1000 * 60 * 60 * 24))
+  return Math.abs(diffDays)
 }
 
 export function getDaysUntil(date: string): number {
-  const now = new Date()
-  const futureDate = new Date(date)
-  const diffTime = futureDate.getTime() - now.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  const now = startOfDay(new Date())
+  const futureDate = startOfDay(parseLocalDate(date))
+  const diffDays = Math.round((futureDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
   return diffDays
 }
 
