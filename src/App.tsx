@@ -9,6 +9,7 @@ import { Riscos } from '@/pages/Riscos'
 import { Reunioes } from '@/pages/Reunioes'
 import { FollowUps } from '@/pages/FollowUps'
 import { Configuracoes } from '@/pages/Configuracoes'
+import { Materiais } from '@/pages/Materiais'
 import { NotFound } from '@/pages/NotFound'
 import { PreferencesProvider, usePreferences } from '@/contexts/PreferencesContext'
 
