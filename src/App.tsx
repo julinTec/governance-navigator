@@ -36,6 +36,7 @@ function App() {
               <Route element={<AppLayout><Riscos /></AppLayout>} path="/riscos" />
               <Route element={<AppLayout><Reunioes /></AppLayout>} path="/reunioes" />
               <Route element={<AppLayout><FollowUps /></AppLayout>} path="/follow-ups" />
+              <Route element={<AppLayout><Materiais /></AppLayout>} path="/materiais" />
               <Route element={<AppLayout><Configuracoes /></AppLayout>} path="/configuracoes" />
               <Route element={<NotFound />} path="*" />
             </Routes>
