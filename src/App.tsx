@@ -30,6 +30,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <PreferencesProvider>
           <Router>
+            <Toaster position="top-right" richColors closeButton />
             <Routes>
               <Route element={<HomeRoute />} path="/" />
               <Route element={<AppLayout><Backlog /></AppLayout>} path="/backlog" />
