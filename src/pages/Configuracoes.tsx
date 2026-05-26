@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { useWorkstreams, useDeleteWorkstream } from '@/hooks/useGovernanceData'
 import { WorkstreamDialog } from '@/components/forms/WorkstreamDialog'
-import { exportAllData, importAllData, clearAllData, seedDemoData } from '@/lib/dataExport'
+import { exportAllData, importAllData, clearAllData } from '@/lib/dataExport'
 import { useQueryClient } from '@tanstack/react-query'
 
 export function Configuracoes() {
