@@ -20,7 +20,6 @@ export function Dashboard() {
     d => d.dueDate && d.dueDate < today && !finished(d.status)
   ).length
   const criticalRisks = mockRisks.filter(r => r.level === 'critico' && r.status !== 'mitigado' && r.status !== 'encerrado').length
-  const pendingDelegations = mockDelegations.filter(d => d.status === 'pendente' || d.status === 'atrasada').length
   const completedDemands = mockDemands.filter(d => d.status === 'concluida').length
   const completionRate = mockDemands.length > 0
     ? Math.round((completedDemands / mockDemands.length) * 100)
