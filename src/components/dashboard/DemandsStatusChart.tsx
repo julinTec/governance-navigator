@@ -78,16 +78,16 @@ export function DemandsStatusChart({ demands }: DemandsStatusChartProps) {
               {data.map(item => {
                 const pct = total > 0 ? Math.round((item.value / total) * 100) : 0
                 return (
-                  <div key={item.key} className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2 min-w-0">
+                  <div key={item.key} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5 min-w-0">
                       <span
-                        className="w-2.5 h-2.5 rounded-sm shrink-0"
+                        className="w-2 h-2 rounded-sm shrink-0"
                         style={{ backgroundColor: item.color }}
                       />
                       <span className="truncate text-muted-foreground">{item.name}</span>
                     </div>
                     <span className="font-medium tabular-nums">
-                      {item.value} <span className="text-muted-foreground text-xs">({pct}%)</span>
+                      {item.value} <span className="text-muted-foreground text-[10px]">({pct}%)</span>
                     </span>
                   </div>
                 )
