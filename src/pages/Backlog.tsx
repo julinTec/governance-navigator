@@ -91,11 +91,12 @@ export function Backlog() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="ativas">Ativas (sem concluídas)</SelectItem>
                 <SelectItem value="todas">Todas</SelectItem>
                 <SelectItem value="aberta">Aberta</SelectItem>
                 <SelectItem value="em-progresso">Em Progresso</SelectItem>
                 <SelectItem value="bloqueada">Bloqueada</SelectItem>
-                <SelectItem value="concluida">Concluída</SelectItem>
+                <SelectItem value="concluida">Concluídas (arquivo)</SelectItem>
               </SelectContent>
             </Select>
           </div>
