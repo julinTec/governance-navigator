@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, LogOut, Settings } from 'lucide-react'
+import { User, LogOut, Settings, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
