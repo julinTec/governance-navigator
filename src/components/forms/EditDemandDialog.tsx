@@ -106,6 +106,15 @@ export function EditDemandDialog({ demand, open, onOpenChange }: Props) {
             <Label>Próximo Passo</Label>
             <Input value={form.nextStep ?? ''} onChange={(e) => setForm({ ...form, nextStep: e.target.value })} />
           </div>
+          <div className="space-y-2">
+            <Label>Anotações</Label>
+            <textarea
+              className="flex min-h-[140px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="Adicione anotações, detalhamentos, históricos..."
+              value={form.description ?? ''}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
+          </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
             <Button type="submit" disabled={update.isPending || create.isPending}>Salvar</Button>
