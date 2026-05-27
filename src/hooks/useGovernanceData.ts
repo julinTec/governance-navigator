@@ -97,6 +97,7 @@ export function useUpdateDemand() {
         .from('demands')
         .update({
           title: d.title,
+          description: d.description,
           origin: d.origin,
           workstream: d.workstream,
           responsible: d.responsible,
@@ -378,6 +379,7 @@ export function useCreateDemand() {
       const supabase = await getSupabase()
       const { error } = await supabase.from('demands').insert({
         title: d.title ?? '',
+        description: d.description,
         origin: d.origin,
         workstream: d.workstream,
         responsible: d.responsible,
