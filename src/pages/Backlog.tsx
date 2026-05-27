@@ -29,14 +29,16 @@ export function Backlog() {
   const { data: mockDemands = [] } = useDemands()
   const deleteDemand = useDeleteDemand()
   const [editing, setEditing] = useState<Demand | null>(null)
-  const [filterStatus, setFilterStatus] = useState<string>('todas')
+  const [filterStatus, setFilterStatus] = useState<string>('ativas')
   const [filterPriority, setFilterPriority] = useState<string>('todas')
   const [filterResponsible, setFilterResponsible] = useState<string>('todas')
   const [searchTerm, setSearchTerm] = useState('')
 
   let filtered = mockDemands
 
-  if (filterStatus !== 'todas') {
+  if (filterStatus === 'ativas') {
+    filtered = filtered.filter(d => d.status !== 'concluida')
+  } else if (filterStatus !== 'todas') {
     filtered = filtered.filter(d => d.status === filterStatus)
   }
   if (filterPriority !== 'todas') {
@@ -89,11 +91,12 @@ export function Backlog() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="ativas">Ativas (sem concluídas)</SelectItem>
                 <SelectItem value="todas">Todas</SelectItem>
                 <SelectItem value="aberta">Aberta</SelectItem>
                 <SelectItem value="em-progresso">Em Progresso</SelectItem>
                 <SelectItem value="bloqueada">Bloqueada</SelectItem>
-                <SelectItem value="concluida">Concluída</SelectItem>
+                <SelectItem value="concluida">Concluídas (arquivo)</SelectItem>
               </SelectContent>
             </Select>
           </div>
