@@ -3,6 +3,7 @@ import { KpiCard } from '@/components/dashboard/KpiCard'
 import { PriorityBoard } from '@/components/dashboard/PriorityBoard'
 import { RiskRadar } from '@/components/dashboard/RiskRadar'
 import { WeeklySummary } from '@/components/dashboard/WeeklySummary'
+import { DemandsStatusChart } from '@/components/dashboard/DemandsStatusChart'
 import { useDemands, useRisks, useMeetings, useDelegations } from '@/hooks/useGovernanceData'
 
 export function Dashboard() {
@@ -75,6 +76,7 @@ export function Dashboard() {
         </div>
 
         <div className="space-y-6">
+          <DemandsStatusChart demands={mockDemands} />
           <RiskRadar risks={mockRisks} />
         </div>
       </div>
