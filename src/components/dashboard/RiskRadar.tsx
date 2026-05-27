@@ -6,12 +6,13 @@ interface RiskRadarProps {
 }
 
 export function RiskRadar({ risks }: RiskRadarProps) {
-  const criticalRisks = risks.filter(r => r.level === 'critico').length
-  const highRisks = risks.filter(r => r.level === 'alto').length
-  const mediumRisks = risks.filter(r => r.level === 'medio').length
-  const lowRisks = risks.filter(r => r.level === 'baixo').length
+  const activeRisks = risks.filter(r => r.status !== 'mitigado' && r.status !== 'encerrado')
+  const criticalRisks = activeRisks.filter(r => r.level === 'critico').length
+  const highRisks = activeRisks.filter(r => r.level === 'alto').length
+  const mediumRisks = activeRisks.filter(r => r.level === 'medio').length
+  const lowRisks = activeRisks.filter(r => r.level === 'baixo').length
 
-  const total = risks.length
+  const total = activeRisks.length
 
   return (
     <Card>
