@@ -69,7 +69,7 @@ export function DemandsStatusChart({ demands }: DemandsStatusChartProps) {
                       borderRadius: 'var(--radius)',
                       fontSize: '12px',
                     }}
-                    formatter={(value: number, name: string) => [`${value}`, name]}
+                    formatter={(value, name) => [`${value}`, `${name}`]}
                   />
                 </PieChart>
               </ResponsiveContainer>
