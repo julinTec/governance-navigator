@@ -97,6 +97,7 @@ export function useUpdateDemand() {
         .from('demands')
         .update({
           title: d.title,
+          description: d.description,
           origin: d.origin,
           workstream: d.workstream,
           responsible: d.responsible,
