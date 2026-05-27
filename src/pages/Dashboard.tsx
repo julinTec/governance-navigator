@@ -52,11 +52,11 @@ export function Dashboard() {
           color="danger"
         />
         <KpiCard
-          title="Delegações Pendentes"
-          value={pendingDelegations}
+          title="Delegações"
+          value={mockDelegations.length}
           icon={Users}
-          description="Aguardando execução"
-          color="warning"
+          description="Total cadastrado"
+          color="default"
         />
         <KpiCard
           title="Taxa de Conclusão"
