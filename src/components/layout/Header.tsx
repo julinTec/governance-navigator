@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, LogOut, Settings } from 'lucide-react'
+import { User, LogOut, Settings, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -43,11 +43,23 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card">
       <div className="flex items-center justify-between px-6 py-4">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground">Cockpit de Governança</h2>
-          <p className="text-sm text-muted-foreground">
-            {now.toLocaleDateString(prefs.dateLocale, { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
-          </p>
+        <div className="flex items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">Gestão de Governança</h2>
+            <p className="text-sm text-muted-foreground">
+              {now.toLocaleDateString(prefs.dateLocale, { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => window.open('https://admrhportal.tjce.jus.br/rhsysweb/secure/EspelhoPontoWebForm.xhtml', '_blank')}>
+              <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+              Ponto
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => window.open('https://hub-governanca-sefin.lovable.app/auth', '_blank')}>
+              <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+              Hub Governança
+            </Button>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
