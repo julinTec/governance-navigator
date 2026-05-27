@@ -35,8 +35,8 @@ export function DemandsStatusChart({ demands }: DemandsStatusChartProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-lg">Demandas por Status</CardTitle>
-        <span className="text-sm text-muted-foreground">Total: {total}</span>
+        <CardTitle className="text-sm">Demandas por Status</CardTitle>
+        <span className="text-xs text-muted-foreground">Total: {total}</span>
       </CardHeader>
       <CardContent>
         {data.length === 0 ? (
