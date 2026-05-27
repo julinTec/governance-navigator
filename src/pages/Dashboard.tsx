@@ -1,4 +1,4 @@
-import { AlertCircle, Clock, TrendingUp, Users } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Clock, TrendingUp, Users } from 'lucide-react'
 import { KpiCard } from '@/components/dashboard/KpiCard'
 import { PriorityBoard } from '@/components/dashboard/PriorityBoard'
 import { RiskRadar } from '@/components/dashboard/RiskRadar'
@@ -10,27 +10,37 @@ export function Dashboard() {
   const { data: mockRisks = [] } = useRisks()
   const { data: mockMeetings = [] } = useMeetings()
   const { data: mockDelegations = [] } = useDelegations()
-  const openDemands = mockDemands.filter(d => d.status === 'aberta').length
-  const overdueDemands = mockDemands.filter(d => d.dueDate < new Date().toISOString().split('T')[0] && d.status !== 'concluida').length
-  const criticalRisks = mockRisks.filter(r => r.level === 'critico').length
+
+  const today = new Date().toISOString().split('T')[0]
+  const finished = (s: string) => s === 'concluida' || s === 'cancelada'
+
+  const activeDemands = mockDemands.filter(d => !finished(d.status)).length
+  const overdueDemands = mockDemands.filter(
+    d => d.dueDate && d.dueDate < today && !finished(d.status)
+  ).length
+  const criticalRisks = mockRisks.filter(r => r.level === 'critico' && r.status !== 'mitigado' && r.status !== 'encerrado').length
   const pendingDelegations = mockDelegations.filter(d => d.status === 'pendente' || d.status === 'atrasada').length
+  const completedDemands = mockDemands.filter(d => d.status === 'concluida').length
+  const completionRate = mockDemands.length > 0
+    ? Math.round((completedDemands / mockDemands.length) * 100)
+    : 0
 
   return (
     <div className="p-6 space-y-6">
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <KpiCard
-          title="Demandas Abertas"
-          value={openDemands}
+          title="Demandas Ativas"
+          value={activeDemands}
           icon={TrendingUp}
-          description="Aguardando início"
+          description="Em andamento ou aguardando"
           color="default"
         />
         <KpiCard
           title="Demandas Atrasadas"
           value={overdueDemands}
           icon={Clock}
-          description="Fora do prazo"
+          description="Prazo vencido"
           color="warning"
         />
         <KpiCard
@@ -47,7 +57,15 @@ export function Dashboard() {
           description="Aguardando execução"
           color="warning"
         />
+        <KpiCard
+          title="Taxa de Conclusão"
+          value={`${completionRate}%`}
+          icon={CheckCircle2}
+          description={`${completedDemands} de ${mockDemands.length} demandas`}
+          color="success"
+        />
       </div>
+
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
