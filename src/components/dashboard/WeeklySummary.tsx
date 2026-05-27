@@ -7,23 +7,22 @@ interface WeeklySummaryProps {
 }
 
 export function WeeklySummary({ demands, meetings }: WeeklySummaryProps) {
-  const thisWeekDemands = demands.filter(d => {
-    const dueDate = new Date(d.dueDate)
-    const today = new Date()
-    const weekLater = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
-    return dueDate >= today && dueDate <= weekLater
-  })
+  const todayStr = new Date().toISOString().split('T')[0]
+  const weekLaterStr = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0]
 
-  const completedThisWeek = thisWeekDemands.filter(d => d.status === 'concluida').length
+  const inRange = (iso?: string) =>
+    !!iso && iso >= todayStr && iso <= weekLaterStr
+
+  const thisWeekDemands = demands.filter(d => inRange(d.dueDate))
+
+  const openThisWeek = thisWeekDemands.filter(d => d.status === 'aberta').length
   const inProgressThisWeek = thisWeekDemands.filter(d => d.status === 'em-progresso').length
+  const completedThisWeek = thisWeekDemands.filter(d => d.status === 'concluida').length
   const blockedThisWeek = thisWeekDemands.filter(d => d.status === 'bloqueada').length
 
-  const thisWeekMeetings = meetings.filter(m => {
-    const meetingDate = new Date(m.date)
-    const today = new Date()
-    const weekLater = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
-    return meetingDate >= today && meetingDate <= weekLater
-  })
+  const thisWeekMeetings = meetings.filter(m => inRange(m.date))
 
   return (
     <Card>
@@ -39,6 +38,10 @@ export function WeeklySummary({ demands, meetings }: WeeklySummaryProps) {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Abertas:</span>
+                <span className="font-medium text-slate-700">{openThisWeek}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">Em progresso:</span>
                 <span className="font-medium text-blue-600">{inProgressThisWeek}</span>
               </div>
@@ -52,6 +55,7 @@ export function WeeklySummary({ demands, meetings }: WeeklySummaryProps) {
               </div>
             </div>
           </div>
+
 
           <div className="space-y-4">
             <div>
