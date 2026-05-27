@@ -162,7 +162,11 @@ export function Backlog() {
               </TableRow>
             ) : (
               filtered.map(demand => (
-                <TableRow key={demand.id} className="hover:bg-muted/50">
+                <TableRow
+                  key={demand.id}
+                  className="hover:bg-muted/50 cursor-pointer"
+                  onClick={() => setEditing(demand)}
+                >
                   <TableCell className="font-medium max-w-xs truncate">{demand.title}</TableCell>
                   <TableCell>{demand.origin}</TableCell>
                   <TableCell className="text-sm">{demand.workstream}</TableCell>
@@ -183,7 +187,7 @@ export function Backlog() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm">{formatDate(demand.dueDate)}</TableCell>
-                  <TableCell>
+                  <TableCell onClick={(e) => e.stopPropagation()}>
                     <RowActions
                       onEdit={() => setEditing(demand)}
                       onDelete={() => deleteDemand.mutate(demand.id)}
