@@ -59,6 +59,10 @@ export function Header() {
               <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
               Hub Governança
             </Button>
+            <Button variant="outline" size="sm" onClick={() => window.open('https://ss.datajust.tjce.jus.br/login/?next=%2Fsuperset%2Fwelcome%2F', '_blank')}>
+              <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+              Portal Pareceres
+            </Button>
           </div>
         </div>
 
